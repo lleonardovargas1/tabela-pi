@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busca de Filmes</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <select name="" id="slcEstados"></select>
-    <select name="" id="slcCidades"></select>
-    <div id="resultado"></div>
-    <script src="script-api.js"></script>
+  <div class="container">
+    <h1>Busca de Filmes</h1>
+    <input type="text" id="movieTitle" placeholder="Digite o título do filme">
+    <button onclick="searchMovie()">Buscar</button>
+    <div id="movieInfo"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>

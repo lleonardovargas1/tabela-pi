@@ -1,27 +1,42 @@
-const fotos = document.getElementById("fotos");
-const apiKey = "GR8pQwDPTSvQYXEtZHlflLsoG9CLvJ5QTCt6FGCf";
+const apiKey = '8f94459b'; 
 
-fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&camera=fhaz&api_key=${apiKey}`)
-  .then(resp => resp.json()) // vai passar a resposta para o formato json
-  .then(data => {
-    let index = 0; // essa e a nossa primeira foto
 
- 
-    const trocarImagem = () => {
-      fotos.innerHTML = ""; // aqui vai limpar
-      const foto = data.photos[index]; // aqui vai pegar a foto la na api
-      if (foto) { // se tiver foto ele vai criar uma imagem dentro do elemento  da const fotos
-        const img = document.createElement("img"); // ele vai criar a imagem
-        img.src = foto.img_src; // ele vai selecionar a imagem criada com  o src da foto
-        img.alt = `Foto tirada pelo rover em Marte - ID: ${foto.id}`; //esse alt é imporante pois ele vai descrever a iamgem
-        fotos.appendChild(img); // isso aqui é um elemento filho ou seja ele vai colocar a imagem dentro do elemento fotos
-        index = (index + 1) % data.photos.length;  //ele vai adicionar 1 no index e se o index for maior que o tamanho do array ele vai voltar para 0
+function searchMovie() {
+  const title = document.getElementById('movieTitle').value.trim(); 
+  if (!title) {
+    alert('Por favor, digite o título do filme.');
+    return;
+  }
+
+  const url = `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${apiKey}&r=json`;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`);
       }
-    };
-
-    trocarImagem(); //  chama a função para mostrar a primeira imagem
-    setInterval(trocarImagem, 5000); // aqui ele vai chamar a função a cada 5 segundos
-  })
-  .catch(error => { //  ele vai mostrar um erro caso tenha algum problema
-    console.error("Erro ao buscar as fotos:", error);
-  });
+      return response.json();
+    })
+    .then(data => {
+      if (data.Response === 'True') {
+        displayMovie(data);
+      } else {
+        document.getElementById('movieInfo').innerHTML = `<p>Filme não encontrado: ${data.Error}</p>`;
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao buscar o filme:', error);
+      alert('Ocorreu um erro ao buscar o filme. Tente novamente mais tarde.');
+    });
+}
+function displayMovie(movie) {
+  const movieInfo = document.getElementById('movieInfo');
+  movieInfo.innerHTML = `
+    <h2>${movie.Title} (${movie.Year})</h2>
+    <img src="${movie.Poster}" alt="${movie.Title}" style="max-width: 200px;">
+    <p><strong>Gênero:</strong> ${movie.Genre}</p>
+    <p><strong>Diretor:</strong> ${movie.Director}</p>
+    <p><strong>Atores:</strong> ${movie.Actors}</p>
+    <p><strong>Sinopse:</strong> ${movie.Plot}</p>
+  `;
+}
